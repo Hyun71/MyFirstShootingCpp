@@ -2,6 +2,9 @@
 
 
 #include "PlayerPawn.h"
+#include <Components/ArrowComponent.h>
+#include "BulletActor.h"
+//void APlayerPawn::OnActionFire()에서 구현하는 bulletFactory, firePosition 를 오류 없이 사용하기 위해 헤더를 추가해 주는 것이다.
 
 // Sets default values
 APlayerPawn::APlayerPawn()
@@ -10,6 +13,11 @@ APlayerPawn::APlayerPawn()
 	PrimaryActorTick.bCanEverTick = true;
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("meshComp"));
+
+	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("firePosition"));
+	firePosition->SetRelativeLocation(FVector(0, 0, 100));  //Relative
+	firePosition->SetRelativeRotation(FRotator(90, 0, 0));  //회전값: y, z, x 순서로 입력.
+	firePosition->SetupAttachment(meshComp);
 
 }
 
@@ -51,6 +59,8 @@ void APlayerPawn::SetupPlayerInputComponent(UInputComponent* PlayerInputComponen
 
 	PlayerInputComponent->BindAxis(TEXT("Vertical"), this, &APlayerPawn::OnAxisVertical);
 
+	PlayerInputComponent->BindAction(TEXT("Fire"), EInputEvent::IE_Pressed, this, &APlayerPawn::OnActionFire);
+
 }
 
 void APlayerPawn::OnAxisHorizontal(float value)  //Axis가 게속 호출된다.
@@ -61,5 +71,11 @@ void APlayerPawn::OnAxisHorizontal(float value)  //Axis가 게속 호출된다.
 void APlayerPawn::OnAxisVertical(float value)
 {
 	v = value;
+}
+
+void APlayerPawn::OnActionFire()
+{
+	GetWorld()->SpawnActor<ABulletActor>(bulletFactory, firePosition->GetComponentTransform());
+	/*GetWorld*/
 }
 
