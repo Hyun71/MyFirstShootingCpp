@@ -63,18 +63,27 @@ void ABulletActor::NotifyActorBeginOverlap(AActor* OtherActor)
 		
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 	}
+	//IsA는 처음 비교하고, if else else ... else if 형태로 진행된다. if else를 계속 중복하여 사용하는 방식이 아니다. 가볍고 효율면에서 좋다.
 
 
-	//if (OtherActor->GetName().Contains(TEXT("Enemy"))); Contains()는 전부 다 읽어서 찾음.
+	//if (OtherActor->GetName().Contains(TEXT("Enemy")));  //Contains()는 문자열들을 전부다 보기 때문에 이런경우 효율면에서 좋지않다.
+	//또한, 적을 찾으려고 하는 것이므로, Enemy1, Enemy2라면 다행이지만 EnemyBullet같은 것이 있다면 이것도 Enemy라는 문자열이 포함되어 있기 때문에 이것도 불러와 버린다.
+
+
 
 	/*AEnemyActor* enemy = Cast<AEnemyActor>(OtherActor);
 	if (enemy != nullptr)
 	{
-
+		Destroy.
 	}
 	else {
 		AEnemyActor* player = Cast<AEnemyActor>(OtherActor);
-		if(player != nullptr)
-	}*/
+		if(player != nullptr) { } else { } ... if() { } else { } ...
+	}
+	Cast 방식은 좀 번거롭다.
+	Cast를 통해서 계속 확인하는 방식으로, if else문이 계속 사용된다.
+	처음에 비교하여 확인하고 아니면 다른것을 비교하고, 이것도 아니면 if else문을 또 사용한다.
+	Cast안에 IsA가 포함되어 있으므로, IsA를 사용하면 된다.
+	*/
 }
 
