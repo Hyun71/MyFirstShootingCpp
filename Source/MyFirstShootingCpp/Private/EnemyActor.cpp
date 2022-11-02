@@ -60,15 +60,16 @@ void AEnemyActor::Tick(float DeltaTime)
 
 void AEnemyActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
-	if (OtherActor->IsA(APlayerPawn::StaticClass()))
+	if (OtherActor->IsA(APlayerPawn::StaticClass()))  // OR를 사용해도 된다.
 	{
 		OtherActor->Destroy();
 
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 	}
-	else {
+	else if (OtherActor->IsA(ABulletActor::StaticClass()) {
 		OtherActor->Destroy();
 
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 	}
+	//여기서 Enemy와 충돌하는 Player와 Bullet 충돌체를 구현하였으므로, 이 둘은 해당 cpp에서 따로 구현할 필요는 없다. 또 구현하면 서로 부시려고 하면서 오류가 날 수 있다.
 }
