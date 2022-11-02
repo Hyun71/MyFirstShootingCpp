@@ -66,7 +66,7 @@ void AEnemyActor::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 	}
-	else if (OtherActor->IsA(ABulletActor::StaticClass()) {
+	else if (OtherActor->IsA(ABulletActor::StaticClass())) {
 		OtherActor->Destroy();
 
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
