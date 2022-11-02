@@ -23,6 +23,8 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
 
@@ -53,4 +55,14 @@ public:
 
 
 	void OnActionFire();  //Action에 대한 바인딩.
+
+
+	//void SetupInput(class UInputComponent* PlayerInputComponent);
+	//Component로 만들면 해당 SetupInput이 자동생성되어 있지 않아서, 구현해주어야 한다.
+
+	UPROPERTY(EditAnywhere)
+		class USoundBase* fireSound;
+
+	UPROPERTY(EditAnywhere)
+		class UBoxComponent* boxComp;
 };

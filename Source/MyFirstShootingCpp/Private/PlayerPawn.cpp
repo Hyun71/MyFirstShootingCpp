@@ -4,6 +4,10 @@
 #include "PlayerPawn.h"
 #include <Components/ArrowComponent.h>
 #include "BulletActor.h"
+#include <Kismet/GameplayStatics.h>  //UGameplayStatics::PlaySound2D(GetWorld(), fireSound); 를 사용하기 위한 헤더 파일.
+#include <Components/BoxComponent.h>
+#include "EnemyActor.h"
+
 //void APlayerPawn::OnActionFire()에서 구현하는 bulletFactory, firePosition 를 오류 없이 사용하기 위해 헤더를 추가해 주는 것이다.
 
 // Sets default values
@@ -12,12 +16,25 @@ APlayerPawn::APlayerPawn()
  	// Set this pawn to call Tick() every frame.  You can turn this off to improve performance if you don't need it.
 	PrimaryActorTick.bCanEverTick = true;
 
+
+	boxComp = CreateDefaultSubobject<UBoxComponent>(TEXT("boxComp"));
+	//boxComp를 Root로 하고 싶다.
+	RootComponent = boxComp;
+
+	//충돌처리 case2: Preset을 이용.
+	boxComp->SetGenerateOverlapEvents(true);
+	boxComp->SetCollisionProfileName(TEXT("Player"));
+
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("meshComp"));
+	meshComp->SetupAttachment(RootComponent);
+
+
 
 	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("firePosition"));
 	firePosition->SetRelativeLocation(FVector(0, 0, 100));  //Relative
 	firePosition->SetRelativeRotation(FRotator(90, 0, 0));  //회전값: y, z, x 순서로 입력.
 	firePosition->SetupAttachment(meshComp);
+
 
 }
 
@@ -77,5 +94,17 @@ void APlayerPawn::OnActionFire()
 {
 	GetWorld()->SpawnActor<ABulletActor>(bulletFactory, firePosition->GetComponentTransform());
 	/*GetWorld*/
+
+	
+	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 }
 
+void APlayerPawn::NotifyActorBeginOverlap(AActor* OtherActor)
+{
+	if (OtherActor->IsA(AEnemyActor::StaticClass()))
+	{
+		OtherActor->Destroy();
+
+		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
+	}
+}
