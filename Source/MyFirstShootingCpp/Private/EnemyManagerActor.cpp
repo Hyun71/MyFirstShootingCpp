@@ -52,4 +52,3 @@ void AEnemyManagerActor::MakeEnemy()
 {
 	GetWorld()->SpawnActor<AEnemyActor>(enemyFactory, spawnArrow->GetComponentTransform());
 }
-

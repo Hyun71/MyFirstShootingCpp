@@ -29,11 +29,12 @@ ABulletActor::ABulletActor()  //BulletActor의 생성자.
 	boxComp->SetGenerateOverlapEvents(true);
 	boxComp->SetCollisionProfileName(TEXT("Bullet"));
 
-
+	boxComp->OnComponentBeginOverlap.AddDynamic(this, &ABulletActor::OnBoxComponentBeginOverlap);
 
 	meshComp = CreateDefaultSubobject<UStaticMeshComponent>(TEXT("meshComp"));
 	meshComp->SetupAttachment(RootComponent);
 
+	
 }
 
 // Called when the game starts or when spawned
@@ -57,12 +58,12 @@ void ABulletActor::Tick(float DeltaTime)
 void ABulletActor::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	//Bullet에 부딪힌 상대가 Enemy라면 Bullet과 Enemy 둘 다 소멸.
-	if (OtherActor->IsA(AEnemyActor::StaticClass()))
-	{
-		OtherActor->Destroy();
-		
-		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
-	}
+	//if (OtherActor->IsA(AEnemyActor::StaticClass()))
+	//{
+	//	OtherActor->Destroy();
+	//	
+	//	this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
+	//}
 	//IsA는 처음 비교하고, if else else ... else if 형태로 진행된다. if else를 계속 중복하여 사용하는 방식이 아니다. 가볍고 효율면에서 좋다.
 
 
@@ -92,7 +93,7 @@ void ABulletActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 {
 	if (OtherActor->IsA(AEnemyActor::StaticClass()))
 	{
-		auto enemy = Cast<AEnemyActor>(OtherActor);  //OtherActor를 AEnemyAcotr로 변환.
+		auto enemy = Cast<AEnemyActor>(OtherActor);  //OtherActor를 AEnemyAcotr로 변환. auto는 자료형을 자동을 가리켜준다. 여기서 auto는 AEnemyActor* 이다.
 		enemy->Explosion();
 		
 		//상대 파괴

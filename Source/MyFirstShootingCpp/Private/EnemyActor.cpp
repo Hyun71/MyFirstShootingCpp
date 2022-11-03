@@ -99,7 +99,6 @@ void AEnemyActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComp
 
 void AEnemyActor::Explosion()
 {
-	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosionVFXFactory, GetActorLocation())
-		;
+	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosionVFXFactory, GetActorLocation());
 }
 //여기서 Enemy와 충돌하는 Player와 Bullet 충돌체를 구현하였으므로, 이 둘은 해당 cpp에서 따로 구현할 필요는 없다. 또 구현하면 서로 부시려고 하면서 오류가 날 수 있다.
