@@ -25,6 +25,10 @@ public:
 
 	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;  //virtual을 해줌으로써 재정의 하여 사용하는 것. 부모의 것을 동일하게 사용하는것이 아니다.
 
+
+	UFUNCTION()
+		void OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+
 	//UStaticMeshComponent 의 meshComp
 	UPROPERTY(EditAnywhere)
 		class UStaticMeshComponent* meshComp;

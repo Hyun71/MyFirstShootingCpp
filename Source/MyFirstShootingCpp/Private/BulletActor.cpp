@@ -71,7 +71,8 @@ void ABulletActor::NotifyActorBeginOverlap(AActor* OtherActor)
 
 
 
-	/*AEnemyActor* enemy = Cast<AEnemyActor>(OtherActor);
+	/*
+	AEnemyActor* enemy = Cast<AEnemyActor>(OtherActor);
 	if (enemy != nullptr)
 	{
 		Destroy.
@@ -85,5 +86,20 @@ void ABulletActor::NotifyActorBeginOverlap(AActor* OtherActor)
 	처음에 비교하여 확인하고 아니면 다른것을 비교하고, 이것도 아니면 if else문을 또 사용한다.
 	Cast안에 IsA가 포함되어 있으므로, IsA를 사용하면 된다.
 	*/
+}
+
+void ABulletActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult)
+{
+	if (OtherActor->IsA(AEnemyActor::StaticClass()))
+	{
+		auto enemy = Cast<AEnemyActor>(OtherActor);  //OtherActor를 AEnemyAcotr로 변환.
+		enemy->Explosion();
+		
+		//상대 파괴
+		OtherActor->Destroy();
+
+		//자신 파괴.
+		this->Destroy();
+	}
 }
 

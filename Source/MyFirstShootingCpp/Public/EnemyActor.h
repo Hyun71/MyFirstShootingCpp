@@ -23,7 +23,12 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;  //충돌을 구현하기 위한 선언.
+
+
+	UFUNCTION()
+		void OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComponent, AActor* OtherActor, UPrimitiveComponent* OtherComp, int32 OtherBodyIndex, bool bFromSweep, const FHitResult& SweepResult);
+	//On
 
 	//몸을 만들고 싶다.
 	UPROPERTY(EditAnywhere)
@@ -38,4 +43,12 @@ public:
 	FVector direction;
 
 	float speed = 500;
+
+public:
+	//Enemy가 누군가(Bullet, Player)와 부딪히면 폭발하고 싶다.
+	//시각효과: VFX
+	UPROPERTY(EditAnywhere)
+		class UParticleSystem* explosionVFXFactory;
+
+	void Explosion();
 };
