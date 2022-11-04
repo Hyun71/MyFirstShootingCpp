@@ -4,6 +4,8 @@
 #include "EnemyManagerActor.h"
 #include <Components/ArrowComponent.h>
 #include "EnemyActor.h"
+#include <Kismet/GameplayStatics.h>
+#include "PlayerPawn.h"
 
 // Sets default values
 AEnemyManagerActor::AEnemyManagerActor()
@@ -50,5 +52,24 @@ void AEnemyManagerActor::Tick(float DeltaTime)
 
 void AEnemyManagerActor::MakeEnemy()
 {
-	GetWorld()->SpawnActor<AEnemyActor>(enemyFactory, spawnArrow->GetComponentTransform());
+	//만약 PlayerPawn이 파괴도지 않았다면
+	//만약 PlayerPawn이 nullptr이 아니라면
+	/*
+	AActor* target = UGameplayStatics::GetActorOfClass(GetWorld(), APlayerPawn::StaticClass());
+
+	TArray<AActor*> OutActors;
+	UGameplayStatics::GetAllActorsOfClass(GetWorld(), APlayerPawn::StaticClass(), OutActors);
+
+	for each (AActor * var in OutActors)  //여기서 var는 variable이다.
+	{
+
+	}
+	*/
+
+	auto target = UGameplayStatics::GetPlayerPawn(GetWorld(), 0);
+	if (target != nullptr)
+	{
+		GetWorld()->SpawnActor<AEnemyActor>(enemyFactory, spawnArrow->GetComponentTransform());
+	}
+	
 }

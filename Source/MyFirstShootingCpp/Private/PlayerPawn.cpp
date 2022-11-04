@@ -31,9 +31,12 @@ APlayerPawn::APlayerPawn()
 
 
 	firePosition = CreateDefaultSubobject<UArrowComponent>(TEXT("firePosition"));
-	firePosition->SetRelativeLocation(FVector(0, 0, 100));  //Relative
+	firePosition->SetRelativeLocation(FVector(0, 0, 100));  //Relative, 부모로부터 떨어진 나의 값. FVector는 자료형이다.
 	firePosition->SetRelativeRotation(FRotator(90, 0, 0));  //회전값: y, z, x 순서로 입력.
-	firePosition->SetupAttachment(meshComp);
+	firePosition->SetupAttachment(RootComponent);  //처음에는 meshComp에 붙어있었지만, mesh를 돌리는 과정에서 arrow도 돌아가서 arrow는 root에 붙여준 것이다.
+
+	meshComp->SetRelativeRotation(FRotator(0, 90, 90));  //FRotator(pitch, yaw, roll);
+	meshComp->SetRelativeScale3D(FVector(3.0f));  //Scale을 설정하는 함수는 SetRelativeScale3D이고, 해당 인자에 하나의 값이 들어가면 한번에 값을 바꾸는 것. 3개의 인자를 넣어주면 x, y, z값 각각 바꿔주는 것이다.
 
 
 }

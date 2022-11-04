@@ -6,6 +6,7 @@
 #include <Kismet/GameplayStatics.h>
 #include "BulletActor.h"
 #include "PlayerPawn.h"
+#include <Kismet/KismetMathLibrary.h>
 
 // Sets default values
 AEnemyActor::AEnemyActor()
@@ -31,6 +32,7 @@ AEnemyActor::AEnemyActor()
 	meshComp->SetupAttachment(RootComponent);  //전부 포인터 이기 때문에, RootComponent에 boxComp의 주소값이 들어가 있다.
 
 
+
 }
 
 // Called when the game starts or when spawned
@@ -51,6 +53,10 @@ void AEnemyActor::BeginPlay()
 		//앞 방향
 		direction = GetActorForwardVector();
 	}
+
+	//이동방향으로 회전하고 싶다.
+	auto rot = UKismetMathLibrary::MakeRotFromXZ(direction, GetActorUpVector());
+	SetActorRotation(rot);
 	
 }
 
