@@ -23,7 +23,7 @@ public:
 	// Called every frame
 	virtual void Tick(float DeltaTime) override;
 
-	virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
+	//virtual void NotifyActorBeginOverlap(AActor* OtherActor) override;
 
 	// Called to bind functionality to input
 	virtual void SetupPlayerInputComponent(class UInputComponent* PlayerInputComponent) override;
@@ -65,4 +65,22 @@ public:
 
 	UPROPERTY(EditAnywhere)
 		class UBoxComponent* boxComp;
+
+
+	int hp;
+
+	UPROPERTY(EditAnywhere, BlueprintReadWrite)
+	int maxHP = 5;
+
+	//Event 함수, Callback함수.
+	void OnMyHit(int damage);  //누군가가 호출해 주는 함수로 표현하기 위해 On을 붙여줌.
+
+	//UFUNCTION(BlueprintNativeEvent, BlueprintCallable) Native와 Implement의 차이???
+
+	//커스텀 이벤트
+	UFUNCTION(BlueprintImplementableEvent, BlueprintCallable)  //Implement는 C++에서는 구현이 되지 않아서 블루프린트에서 구현해야 한다.
+	void OnMyUpdateHealth(int value);
+
+
+	//Callable은 실행 핀이 있다. Pure는 실행 핀이 없다.
 };

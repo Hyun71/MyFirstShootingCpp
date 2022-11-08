@@ -45,6 +45,9 @@ APlayerPawn::APlayerPawn()
 void APlayerPawn::BeginPlay()
 {
 	Super::BeginPlay();
+
+	//HP 초기값 세팅
+	hp = maxHP;
 	
 }
 
@@ -102,7 +105,7 @@ void APlayerPawn::OnActionFire()
 	UGameplayStatics::PlaySound2D(GetWorld(), fireSound);
 }
 
-void APlayerPawn::NotifyActorBeginOverlap(AActor* OtherActor)
+/*void APlayerPawn::NotifyActorBeginOverlap(AActor* OtherActor)
 {
 	if (OtherActor->IsA(AEnemyActor::StaticClass()))
 	{
@@ -110,4 +113,17 @@ void APlayerPawn::NotifyActorBeginOverlap(AActor* OtherActor)
 
 		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 	}
+}*/
+
+void APlayerPawn::OnMyHit(int damage)
+{
+	hp -= damage;
+	OnMyUpdateHealth(hp);
+
+	//만약 hp가 0이하이라면
+	if (hp <= 0) {
+		//파괴하고 싶다.
+		this->Destroy();  //UI가 0까지 보인 후 파괴되도록 하고자 한다면, 시간값을 주어 늦춰주면 된다.
+	}
+	
 }

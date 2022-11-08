@@ -90,16 +90,17 @@ void AEnemyActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComp
 {
 	if (OtherActor->IsA(APlayerPawn::StaticClass()))  // OR를 사용해도 된다.
 	{
-		OtherActor->Destroy();
+		//체력 감소 구현 전: OtherActor->Destroy();
 
-		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
+		//체력 감소 구현 전: this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
 		Explosion();
-	}
-	else if (OtherActor->IsA(ABulletActor::StaticClass())) {
-		OtherActor->Destroy();
 
-		this->Destroy();  //만약 Component라면 this가 아니라 Owner를 넣어야 한다.
-		Explosion();
+		//너 Hit하고
+		auto player = Cast<APlayerPawn>(OtherActor);
+		player->OnMyHit(1);
+
+		//나죽고 하고싶다.
+		this->Destroy();
 	}
 }
 

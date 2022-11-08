@@ -5,6 +5,7 @@
 #include <Components/StaticMeshcomponent.h>  //UStaticMeshComponent같은 자료형을 사용하기 위함. 원래는 BulletActor.h 헤더파일내에 있지만, 만약 따로 쓸 경우 이 헤더파일 필요.
 #include <Components/BoxComponent.h>
 #include "EnemyActor.h"
+#include "../MyFirstShootingCppGameModeBase.h"  //../는 경로를 의미이다. 상대경로이고 ../는 자신보다 한칸 위의 폴더.
 
 // Sets default values
 ABulletActor::ABulletActor()  //BulletActor의 생성자.
@@ -93,6 +94,13 @@ void ABulletActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 {
 	if (OtherActor->IsA(AEnemyActor::StaticClass()))
 	{
+		//1점 증가시키고 싶다. 여기 부분은 UI 시작한 부분.
+		// = AddScore를 호출하고 싶다. 'Auth'라는 것은 검증된 이라는 의미.
+		auto gm = GetWorld()->GetAuthGameMode();
+		auto gameMode = Cast<AMyFirstShootingCppGameModeBase>(gm);
+		gameMode->AddScore(1);
+
+
 		auto enemy = Cast<AEnemyActor>(OtherActor);  //OtherActor를 AEnemyAcotr로 변환. auto는 자료형을 자동을 가리켜준다. 여기서 auto는 AEnemyActor* 이다.
 		enemy->Explosion();
 		
@@ -101,6 +109,8 @@ void ABulletActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedCom
 
 		//자신 파괴.
 		this->Destroy();
+
+		
 	}
 }
 
