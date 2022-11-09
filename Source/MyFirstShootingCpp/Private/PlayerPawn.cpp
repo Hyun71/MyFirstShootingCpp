@@ -7,6 +7,7 @@
 #include <Kismet/GameplayStatics.h>  //UGameplayStatics::PlaySound2D(GetWorld(), fireSound); 를 사용하기 위한 헤더 파일.
 #include <Components/BoxComponent.h>
 #include "EnemyActor.h"
+#include "../MyFirstShootingCppGameModeBase.h"  //상위 폴더에 있는 헤더 파일이다.
 
 //void APlayerPawn::OnActionFire()에서 구현하는 bulletFactory, firePosition 를 오류 없이 사용하기 위해 헤더를 추가해 주는 것이다.
 
@@ -122,6 +123,11 @@ void APlayerPawn::OnMyHit(int damage)
 
 	//만약 hp가 0이하이라면
 	if (hp <= 0) {
+		//GameMode 가져온다.
+		//사용자가 생성한 GameMode로 바꿈.
+		//해당 게임모드의 함수를 호출.
+		auto gameMode = Cast<AMyFirstShootingCppGameModeBase>(GetWorld()->GetAuthGameMode());
+		gameMode->ShowGameOverUI();
 		//파괴하고 싶다.
 		this->Destroy();  //UI가 0까지 보인 후 파괴되도록 하고자 한다면, 시간값을 주어 늦춰주면 된다.
 	}

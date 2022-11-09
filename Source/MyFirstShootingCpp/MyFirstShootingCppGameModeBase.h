@@ -25,7 +25,13 @@ public:
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UScoreWidget> scoreWidgetFactory;
 
-
-
 	class UScoreWidget* scoreWidget;
+
+
+	UPROPERTY(EditAnywhere)
+	TSubclassOf<class UGameOverWidget> gameOverWidgetFactory;
+
+	class UGameOverWidget* gameOverWidget;
+
+	void ShowGameOverUI();  //이 함수를 호출하면 GameOver UI를 생성.
 };
