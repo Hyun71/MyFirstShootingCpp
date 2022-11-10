@@ -99,7 +99,7 @@ void APlayerPawn::OnAxisVertical(float value)
 
 void APlayerPawn::OnActionFire()
 {
-	GetWorld()->SpawnActor<ABulletActor>(bulletFactory, firePosition->GetComponentTransform());
+		GetWorld()->SpawnActor<ABulletActor>(bulletFactory, firePosition->GetComponentTransform());
 	/*GetWorld*/
 
 	

@@ -7,6 +7,7 @@
 #include "BulletActor.h"
 #include "PlayerPawn.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "EnemyBulletActor.h"
 
 // Sets default values
 AEnemyActor::AEnemyActor()
@@ -57,7 +58,11 @@ void AEnemyActor::BeginPlay()
 	//이동방향으로 회전하고 싶다.
 	auto rot = UKismetMathLibrary::MakeRotFromXZ(direction, GetActorUpVector());
 	SetActorRotation(rot);
-	
+
+
+	//총알(EnemyBullet)을 생성하고 싶다.
+	//랜덤으로 min, max
+	GetWorldTimerManager().SetTimer(timerHandleMakeBullet, this, & AEnemyActor::MakeEnemyBullet, FMath::FRandRange(makeMin, makeMax), false);  //reference 타입이여서 dot(.)이다. 포인터였다면 화살표(->)를 사용한다.
 }
 
 // Called every frame
@@ -107,5 +112,20 @@ void AEnemyActor::OnBoxComponentBeginOverlap(UPrimitiveComponent* OverlappedComp
 void AEnemyActor::Explosion()
 {
 	UGameplayStatics::SpawnEmitterAtLocation(GetWorld(), explosionVFXFactory, GetActorLocation());
+}
+
+void AEnemyActor::MakeEnemyBullet()
+{
+	//p0 + Forward * 100
+	FVector loc = GetActorLocation() + GetActorForwardVector() * 100;
+	FRotator rot = GetActorRotation();
+	GetWorld()->SpawnActor<AEnemyBulletActor>(enemyBulletFactory, loc, rot);
+
+
+	//
+	GetWorldTimerManager().SetTimer(timerHandleMakeBullet, this, &AEnemyActor::MakeEnemyBullet, FMath::FRandRange(makeMin, makeMax), false);
+
+
+
 }
 //여기서 Enemy와 충돌하는 Player와 Bullet 충돌체를 구현하였으므로, 이 둘은 해당 cpp에서 따로 구현할 필요는 없다. 또 구현하면 서로 부시려고 하면서 오류가 날 수 있다.

@@ -20,7 +20,20 @@ public:
 	virtual void BeginPlay() override;
 
 	int score;
+	//highscore 추가.
+	int highScore;
+
 	void AddScore(int value);
+
+	//SaveGame
+	FString saveFileName;
+	int32 saveUserIndex;
+
+	//highScore값이 변하면 호출.
+	void TrySaveGame(int32 value);
+	//게임을 시작할 때 한 번 호출.
+	int32 TryLoadGame();
+
 
 	UPROPERTY(EditAnywhere)
 	TSubclassOf<class UScoreWidget> scoreWidgetFactory;

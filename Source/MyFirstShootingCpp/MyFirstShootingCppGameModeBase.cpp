@@ -6,9 +6,14 @@
 #include "ScoreWidget.h"
 #include <Components/TextBlock.h>
 #include "GameOverWidget.h"
+#include "HighScoreSaveGame.h"
+#include <Kismet/GameplayStatics.h>
 
 void AMyFirstShootingCppGameModeBase::BeginPlay()
 {
+	saveFileName = TEXT("HIGH_SCORE");
+	saveUserIndex = 0;
+
 	//Score위젯을 생성해서
 	scoreWidget = CreateWidget<UScoreWidget>(GetWorld(), scoreWidgetFactory);
 	//화면에 출력하고 싶다.
@@ -25,6 +30,9 @@ void AMyFirstShootingCppGameModeBase::BeginPlay()
 
 	//GetWorld()->GetFirstPlayerController()->SetPause(true);  //일시정지.
 
+	highScore = TryLoadGame();
+	scoreWidget->TextBlock_HighScore->SetText(FText::AsNumber(highScore));
+
 }
 
 void AMyFirstShootingCppGameModeBase::AddScore(int value)
@@ -32,6 +40,39 @@ void AMyFirstShootingCppGameModeBase::AddScore(int value)
 	//점수를 누적하고싶다.
 	score += value;
 	scoreWidget->TextBlock_Score->SetText(FText::AsNumber(score));  //들어온 값을 문자로 바꾸어주는 것.
+
+
+	//HighScore 생성
+	//만약 score > highscore 라면, hightscore = score; 이다. 그리고 UI에도 반영하고 싶다.
+	if (score > highScore)
+	{
+		highScore = score;
+		scoreWidget->TextBlock_HighScore->SetText(FText::AsNumber(highScore));  //들어온 값을 문자로 바꾸어주는 것.
+
+	 }
+}
+
+void AMyFirstShootingCppGameModeBase::TrySaveGame(int32 value)
+{
+	USaveGame* temp = UGameplayStatics::CreateSaveGameObject(UHighScoreSaveGame::StaticClass());
+
+	UHighScoreSaveGame* saveInst = Cast<UHighScoreSaveGame>(temp);
+
+	saveInst->save_highscore;
+
+	UGameplayStatics::SaveGameToSlot(saveInst, saveFileName, saveUserIndex);
+}
+ 
+int32 AMyFirstShootingCppGameModeBase::TryLoadGame()
+{
+	if (false == UGameplayStatics::LoadGameFromSlot(saveFileName, saveUserIndex))
+	{
+		return 0;
+	}
+	USaveGame* temp = UGameplayStatics::LoadGameFromSlot(saveFileName, saveUserIndex);
+	
+	UHighScoreSaveGame* saveInst = Cast<UHighScoreSaveGame>(temp);
+	return saveInst->save_highscore;
 }
 
 void AMyFirstShootingCppGameModeBase::ShowGameOverUI()

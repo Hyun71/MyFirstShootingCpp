@@ -52,4 +52,17 @@ public:
 		class UParticleSystem* explosionVFXFactory;
 
 	void Explosion();
+
+
+	FTimerHandle timerHandleMakeBullet;  //타이머를 멈추고 싶을 때 사용. 총알 멈추게 하고 싶을 때 사용.
+	UPROPERTY(EditAnywhere)
+		float makeMin = 0.5f;
+	UPROPERTY(EditAnywhere)
+		float makeMax = 1.0f;
+
+
+	UPROPERTY(EditAnywhere)
+		TSubclassOf<class AEnemyBulletActor> enemyBulletFactory;
+
+	void MakeEnemyBullet();  //이 함수를 타이머에 등록하여 사용할 것이다.
 };
