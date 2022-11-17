@@ -48,7 +48,7 @@ void AMyFirstShootingCppGameModeBase::AddScore(int value)
 	{
 		highScore = score;
 		scoreWidget->TextBlock_HighScore->SetText(FText::AsNumber(highScore));  //들어온 값을 문자로 바꾸어주는 것.
-
+		TrySaveGame(highScore);  //save값에 하이스코어를 넣어준다.
 	 }
 }
 
@@ -58,14 +58,14 @@ void AMyFirstShootingCppGameModeBase::TrySaveGame(int32 value)
 
 	UHighScoreSaveGame* saveInst = Cast<UHighScoreSaveGame>(temp);
 
-	saveInst->save_highscore;
+	saveInst->save_highscore = value;  //하이스코어 값을 value로 가져와서 하이스코어를 저장하는 변수에 넣어준다.
 
 	UGameplayStatics::SaveGameToSlot(saveInst, saveFileName, saveUserIndex);
 }
  
 int32 AMyFirstShootingCppGameModeBase::TryLoadGame()
 {
-	if (false == UGameplayStatics::LoadGameFromSlot(saveFileName, saveUserIndex))
+	if (false == UGameplayStatics::DoesSaveGameExist(saveFileName, saveUserIndex))  //savegame 데이터가 있는지 확인하는 과정을 거친다.
 	{
 		return 0;
 	}
