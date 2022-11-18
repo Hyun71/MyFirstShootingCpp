@@ -3,6 +3,7 @@
 
 #include "BossActor.h"
 #include <Kismet/KismetMathLibrary.h>
+#include "EnemyBulletActor.h"
 
 
 // Sets default values
@@ -62,6 +63,52 @@ void ABossActor::TickMove()
 
 void ABossActor::TickAttack()
 {
-	
+	if (bfireOneShot)
+	{
+		//시간이 흐르다가
+		currentTime += GetWorld()->GetDeltaSeconds();
+		//발사시간이 되면
+		if (currentTime > fireTime)
+		{
+			currentTime = 0;
+			//적 총알 공장에서 총알을 12발 만들어서 360도로 쏘고 싶다.
+			FQuat zeroQ = FQuat(FRotator(90, 0, 0)); //FQuat는 쿼터니언 자료형
+			for (int i = 0; i < 12; i++)
+			{
+				FQuat addQ = FQuat(FRotator(0, i * 30, 0));
+				FRotator angle = FRotator(zeroQ * addQ);  //쿼터니언의 곱은 덧셈이다. 곱한 다음 로테이터로 변환. 기준 각도와 더할 각도를 더해주며, 새로운 기준 각도를 계속 불러온다.
+				MakeEnemyBullet(GetActorLocation(), angle);
+			}
+
+		}
+	}
+	else  //나선 형태의 총알 발사 구현
+	{
+		currentTime += GetWorld()->GetDeltaSeconds();
+		if (currentTime > shotFireTime)
+		{
+			currentTime = 0;
+			float shotAngle = 360 / shotMaxIndex;  //한발 한발 총알 각도 구함.
+		
+			FQuat zeroQ = FQuat(FRotator(90, 0, 0)); //FQuat는 쿼터니언 자료형
+			FQuat addQ = FQuat(FRotator(0, shotIndex * shotAngle, 0));  //shotIndex는 0부터 시작.
+			FRotator angle = FRotator(zeroQ * addQ);  //쿼터니언의 곱은 덧셈이다. 곱한 다음 로테이터로 변환. 기준 각도와 더할 각도를 더해주며, 새로운 기준 각도를 계속 불러온다.
+			MakeEnemyBullet(GetActorLocation(), angle);
+
+			shotIndex++;
+			if (++shotIndex > shotMaxIndex)
+			{
+				shotIndex = 0;
+			}  //shotIndex = (shotIndex + 1) % shotMaxIndex; 처럼 한 줄로 작성할 수도 있다. 순방향.
+			//shotIndex = (shotIndex + shotMaxIndex - 1) % shotMaxIndex;  역방향.
+		}
+	}
+}
+
+void ABossActor::MakeEnemyBullet(FVector loc, FRotator angle)
+{
+	GetWorld()->SpawnActor<AEnemyBulletActor>(enemyBulletFactory, loc, angle);  //헤더 파일 필요. #include "EnemyBulletActor.h"
+
+
 }
 
