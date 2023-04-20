@@ -1,0 +1,12 @@
+{
+    "Version": "1.1",
+    "Data": {
+        "Source": "d:\\unreal engine\\mediciprojects\\myprojects\\myfirstshootingcpp\\plugins\\developer\\riderlink\\hostproject\\plugins\\riderlink\\source\\rd\\thirdparty\\thirdparty.cpp",
+        "ProvidedModule": "",
+        "Includes": [
+            "d:\\unreal engine\\mediciprojects\\myprojects\\myfirstshootingcpp\\plugins\\developer\\riderlink\\hostproject\\plugins\\riderlink\\intermediate\\build\\win64\\unrealeditor\\development\\rd\\definitions.h"
+        ],
+        "ImportedModules": [],
+        "ImportedHeaderUnits": []
+    }
+}
